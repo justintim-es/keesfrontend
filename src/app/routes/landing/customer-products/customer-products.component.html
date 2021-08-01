@@ -1,0 +1,50 @@
+<section class="hero is-fullheight is-black is-bold">
+  <div class="hero-head">
+    <nav class="level is-mobile">
+      <div class="level-left">
+        <div class="level-item has-text-left">
+          <div>
+            <button mat-button>
+              <mat-icon class="is-size-1 has-text-warning">arrow_back</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+        <div class="level-item has-text-centered" style="padding: 10px;">
+          <div>
+            <button mat-button>
+              <mat-icon class="is-size-1 has-text-warning">shopping_cart</mat-icon>
+            </button>
+          </div>
+        </div>
+    </nav>
+    <div class="container has-text-left">
+      <div class="hero-body">
+        <div class="container has-text-left">
+
+          <div class="container has-text-centered">
+            <div class="spinner-border has-text-warning" *ngIf="isFetch | async"></div>
+          </div>
+          <div *ngIf="!(isFetch | async)">
+            <div *ngFor="let product of (products | async)">
+                <img @transformProductsProductImageTrigger  class="img-fluid" style="max-width: 500px; height: 500px; float: right;" src="{{ (backend | async) + '/api/images/' + product.imageId }}" />
+              <br>
+              <p class="title has-text-warning" @transformProductsProductTitleDescriptionTrigger>
+                {{ product.title }}
+              </p>
+              <p class="subtitle has-text-warning">
+                {{ '€ ' + product.price }}
+              </p>
+              <p class="subtitle has-text-warning" @transformProductsProductDescriptionTrigger>
+                {{ product.description }}
+              </p>
+              <div style="clear: both;"></div>
+              <button mat-button class="has-text-warning">Add to shopping cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

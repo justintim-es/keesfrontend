@@ -1,0 +1,85 @@
+<p class="title has-text-warning">
+  Upload a new product
+</p>
+<div class="file has-name">
+  <label class="file-label">
+    <input class="file-input" (change)="imageChange($event)" #fileInput type="file" name="resume">
+    <span class="file-cta">
+      <span class="file-icon">
+        <i class="fas fa-upload"></i>
+      </span>
+      <span class="file-label">
+        Choose a charger…
+      </span>
+    </span>
+    <span class="file-name has-text-warning">
+      {{ fileName }}
+    </span>
+  </label>
+</div>
+<br/>
+<div class="spinner-border text-warning" *ngIf="isChargerFetch | async"></div>
+<div *ngIf="(isDisplayImage | async) && !(isChargerFetch | async)">
+  <p class="subtitle has-text-warning">will be displayed on website like: </p>
+  <div>
+    <img class="img-fluid" style="max-width: 500px; height: 500px; float: right;" src="{{ (backend | async) + '/api/images/' + (imageId | async) }}" />
+    <p class="title has-text-warning">
+      {{ title }}
+    </p>
+    <p class="subtitle has-text-warning">
+      {{ '€ ' + eurosValue + ',' + centsValue }}
+    </p>
+    <p class="subtitle has-text-warning">
+      {{ description }}
+    </p>
+  </div>
+  <div style="clear: both;"></div>
+  <div class="container has-text-centered">
+    <button class="has-text-warning" mat-button>Add to shopping cart</button>
+    <mat-form-field class="full-width">
+      <input type="text" placeholder="Title" [formControl]="titleFormControl" [(ngModel)]="title" matInput>
+    <mat-error *ngIf="titleFormControl.hasError('required')">
+      Title is required
+    </mat-error>
+    </mat-form-field>
+    <table class="full-width" style="table-layout: fixed;">
+      <tr>
+        <td  style="padding-right: 8px;">
+          <mat-form-field style="text-align: end;" class="full-width">
+            <input matInput
+            [formControl]="priceFormControl"
+            [errorStateMatcher]="errorStateMatcher"
+            [(ngModel)]="eurosValue"
+            placeholder="€ 0,"
+            type="number">
+            <mat-error *ngIf="priceFormControl.hasError('required')">
+              Price is required
+            </mat-error>
+          </mat-form-field>
+        </td>
+        <td>
+          <mat-form-field class="full-width">
+            <input matInput
+            [formControl]="priceFormControl"
+            [errorStateMatcher]="errorStateMatcher"
+            [(ngModel)]="centsValue"
+            placeholder="00" type="number">
+          </mat-form-field>
+        </td>
+      </tr>
+    </table>
+    <mat-form-field class="full-width">
+      <textarea rows="6" [errorStateMatcher]="errorStateMatcher"[formControl]="descriptionFormControl" [(ngModel)]="description" matInput placeholder="Description"></textarea>
+      <mat-error *ngIf="descriptionFormControl.hasError('required')">
+        Description is required
+      </mat-error>
+      <mat-error *ngIf="descriptionFormControl.hasError('backend')">
+        {{  (fetchError | async | json) }}
+      </mat-error>
+    </mat-form-field>
+    <button mat-button (click)="cancel()" class="has-text-warning">cancel</button>
+    <button mat-button (click)="upload()" class="has-text-warning">upload &nbsp;
+      <div class="spinner-border spinner-border-sm has-text-warning" *ngIf="isUploadFetch | async"></div>
+    </button>
+  </div>
+</div>
